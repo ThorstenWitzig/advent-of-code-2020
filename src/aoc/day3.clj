@@ -2,8 +2,8 @@
   (:require [clojure.string :as string]))
 
 (defn count-line [line pos]
-  (if (= \#
-         (nth line (mod pos (count line))))
+  (if (= \#            ;Sadly, clojure makes a different between a char and a one sized string, so "#" and \# are different things
+         (nth line (mod pos (count line))))                 ; nth returns the nth element of a list. Strings are a list of chars.
     1
     0))
 

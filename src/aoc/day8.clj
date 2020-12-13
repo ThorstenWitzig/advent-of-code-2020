@@ -1,8 +1,7 @@
 (ns aoc.day8
-  (:require [clojure.string :as string]
-            [clojure.set :as set]))
+  (:require [clojure.string :as string]))
 
-
+; It was useful last day, so why not use it again?
 (defn remove-whitespaces
   "Removes whitespaces from a string"
   [s]
@@ -20,11 +19,12 @@
            (string/join ":")
            remove-whitespaces))
 
+;Part 1
 (defn run-program [prg line-number acc cmds]
   (if (some #{line-number} cmds)
     acc
     (let [line (nth prg line-number)]
-      (cond
+      (cond ; Syntax-Sugar for nested ifs, Pair of conditions and code to execute if condition matches
         (string/starts-with? line "acc") (run-program prg
                                                       (inc line-number)
                                                       (+ acc (read-string (extract-after-first line " ")))
@@ -44,6 +44,7 @@
                0
                (list)))
 
+;Part 2
 (defn run-program-terminating [prg line-number acc cmds]
   (if (some #{line-number} cmds)
     nil
@@ -58,7 +59,7 @@
           (string/starts-with? line "nop") (run-program-terminating prg
                                                         (inc line-number)
                                                         acc
-                                                        (conj cmds line-number))
+                                                        (conj cmds line-number)) ; conj adds an element to a list (creating a new one, of course, its functional programming after all!)
           (string/starts-with? line "jmp") (run-program-terminating prg
                                                         (+ line-number (read-string (extract-after-first line " ")))
                                                         acc
@@ -70,9 +71,9 @@
     (string/starts-with? line "jmp") (string/replace line "jmp" "nop")))
 
 (defn change-prg-at [prg line-number]
-  (concat (take line-number prg)
-          (list (change-line (nth prg line-number)))
-          (drop (inc line-number) prg)))
+  (concat (take line-number prg)                            ; take returns a new list of the first n elements of a list. Concat puts lists together
+          (list (change-line (nth prg line-number)))        ; (list) creates a new list, e.g (list 1 2 3) create a list containing these 3 elements
+          (drop (inc line-number) prg)))                    ; drop returns a new list by dropping the first n elements of a list. Yes, (concat (take n lis) (drop n lis)) = lis
 
 (defn try-prgs [prg changed-line]
   (if-let [result (run-program-terminating (change-prg-at prg changed-line)
