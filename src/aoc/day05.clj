@@ -1,4 +1,4 @@
-(ns aoc.day5
+(ns aoc.day05
   (:require [clojure.string :as string]))
 
 ; Yes, this puzzle could have been way easier, if interpreted as binary numbers.

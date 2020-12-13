@@ -1,4 +1,4 @@
-(ns aoc.day8
+(ns aoc.day08
   (:require [clojure.string :as string]))
 
 ; It was useful last day, so why not use it again?

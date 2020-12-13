@@ -1,4 +1,4 @@
-(ns aoc.day1)
+(ns aoc.day01)
 
 ;Part one
 ; defn defines a new function. [n lis] defines a list of variables (two in this case). Can be empty

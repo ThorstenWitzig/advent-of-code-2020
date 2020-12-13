@@ -1,4 +1,4 @@
-(ns aoc.day9)
+(ns aoc.day09)
 
 ; Hey, I've seen these two functions, they are classics!
 ; What do you mean you've seen it? It's brand new!

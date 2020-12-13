@@ -1,4 +1,4 @@
-(ns aoc.day3
+(ns aoc.day03
   (:require [clojure.string :as string]))
 
 (defn count-line [line pos]

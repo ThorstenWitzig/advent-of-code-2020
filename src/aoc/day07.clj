@@ -1,4 +1,4 @@
-(ns aoc.day7
+(ns aoc.day07
   (:require [clojure.string :as string]))
 
 ;To be honest, I was even lazier than usual for this puzzle and copy and pasted some code from another project of mine
