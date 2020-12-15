@@ -20,6 +20,9 @@
                           (find-n (count xs) x xs))
                        lis)))))
 
+(defn find-number [end lis]
+  (next-step end (reverse lis)))
+
 ;Part 2
 (defn next-step-optimized [memory step end last-num]
   (if (= end step)
@@ -29,3 +32,12 @@
       (if-let [m1 (get memory last-num)]
         (recur new-mem (inc step) end (- step m1))
         (recur new-mem (inc step) end 0)))))
+
+(defn find-number-optimized [end lis]
+  (next-step-optimized (->> lis
+                            drop-last
+                            (map-indexed (fn [i x] {x (inc i)}))
+                            (into {}))
+                       (count lis)
+                       end
+                       (last lis)))
