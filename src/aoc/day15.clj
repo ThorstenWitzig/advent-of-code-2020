@@ -27,17 +27,18 @@
 (defn next-step-optimized [memory step end last-num]
   (if (= end step)
     last-num
-    (let [new-mem (merge memory
-                         {last-num step})]
+    (let [new-mem (assoc memory last-num step)]
       (if-let [m1 (get memory last-num)]
         (recur new-mem (inc step) end (- step m1))
         (recur new-mem (inc step) end 0)))))
 
 (defn find-number-optimized [end lis]
-  (next-step-optimized (->> lis
-                            drop-last
-                            (map-indexed (fn [i x] {x (inc i)}))
-                            (into {}))
-                       (count lis)
-                       end
-                       (last lis)))
+  (let [start (System/currentTimeMillis)
+        result (next-step-optimized (->> lis
+                                         drop-last
+                                         (map-indexed (fn [i x] {x (inc i)}))
+                                         (into {}))
+                                    (count lis)
+                                    end
+                                    (last lis))]
+    (str "Result: " result ". Found in " (/ (- (System/currentTimeMillis) start) 1000.0) "s")))
