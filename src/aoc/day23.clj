@@ -26,31 +26,22 @@
     dict
     (recur x
            (-> dict
-               (assoc-in [last :next] x)
-               (assoc-in [x :prev] last))
+               (assoc last x))
            xs)))
 
 (defn build-linked-dict [lis]
   (build-linked-dict-step (last lis) {} lis))
 
 (defn move-cups-optimized [maximum current dict]
-  (let [current-cup (get dict current)
-        t1 (:next current-cup)
-        t1-cup (get dict t1)
-        t2 (:next t1-cup)
-        t2-cup (get dict t2)
-        t3 (:next t2-cup)
-        t3-cup (get dict t3)
+  (let [t1 (get dict current)
+        t2 (get dict t1)
+        t3 (get dict t2)
         next (find-n-or-highest-optimized (dec current) [t1 t2 t3] maximum)
-        next-cup (get dict next)
         new-dict (-> dict
-                     (assoc-in [current :next] (:next t3-cup))
-                     (assoc-in [(:next t3-cup) :prev] current)
-                     (assoc-in [next :next] t1)
-                     (assoc-in [t1 :prev] next)
-                     (assoc-in [(:next next-cup) :prev] t3)
-                     (assoc-in [t3 :next] (:next next-cup)))]
-    {:next (:next t3-cup)
+                     (assoc current (get dict t3))
+                     (assoc next t1)
+                     (assoc t3 (get dict next)))]
+    {:next (get dict t3)
      :dict new-dict}))
 
 (defn do-n-moves [moves current maximum dict]
@@ -64,9 +55,9 @@
           (range (inc (count cups)) 1000001)))
 
 (defn print-result [dict]
-  (let [one (get dict 1)]
-    (println (:next one))
-    (println (:next (get dict (:next one))))))
+  (let [after-one (get dict 1)]
+    (println after-one)
+    (println (get dict after-one))))
 
 (defn do-a-crappy-game [cups]
   (println (System/currentTimeMillis))
