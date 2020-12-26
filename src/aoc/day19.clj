@@ -103,13 +103,10 @@
     (if (= (count (vals rule-map))
            solved-count)
       new-step
-      (solve-rules new-step))))
+      (recur new-step))))
 
 (defn get-allowed-strings [solved-rules]
-  (->> solved-rules
-       vals
-       (map :solved)
-       (reduce concat)))
+  (:solved (get solved-rules 0)))
 
 (defn check-input [input]
   (let [rules-raw (parse-rules input)
@@ -120,4 +117,37 @@
                      string/split-lines)]
     (->> messages
          (filter #(some #{%} allowed-strings))
+         count)))
+
+; Part 2
+(defn match-part-r42-r31 [part r42 r31]
+  (cond
+    (some #{part} r42) "r42"
+    (some #{part} r31) "r31"
+    :else "invalid"))
+
+(defn match-r42-r31 [word r42 r31]
+  (println word)
+  (let [checked-word (->> (partition 8 word)
+                          (map string/join)
+                          (map #(match-part-r42-r31 % r42 r31)))
+        r42-count    (count (filter #(= "r42" %) checked-word))]
+    (println checked-word)
+    (let [result (and (not (some #{"invalid"} checked-word))
+                      (> (* 2 r42-count) (count checked-word))
+                      (every? #(= "r42" %) (take r42-count checked-word))
+                      (< r42-count (count checked-word)))]
+      (println result)
+      result)))
+
+(defn check-input-with-recursion [input]
+  (let [solved-rules (->> input
+                          parse-rules
+                          solve-rules)
+        r42 (:solved (get solved-rules 42))
+        r31 (:solved (get solved-rules 31))]
+    (->> (string/split input #"\n\n")
+         second
+         string/split-lines
+         (filter #(match-r42-r31 % r42 r31))
          count)))
